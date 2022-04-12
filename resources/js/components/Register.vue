@@ -103,7 +103,6 @@ export default {
               this.user.phone = ''; 
               this.user.address = ''; 
               this.user.password = ''; 
-              debugger;
               this.user.password_confirmation = ''; 
         },
          register(){

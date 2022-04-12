@@ -59,8 +59,8 @@ class RegisterController extends Controller
         $context = stream_context_create($opts);
         $content_url = file_get_contents($url, false, $context); 
         $json = json_decode($content_url);
-        $latitude=!empty($json[0]->lat)?$json[0]->lat:'';
-        $longitude=!empty($json[0]->lon)?$json[0]->lon:$json[0]->lon;
+        $latitude=(!empty($json) &&!empty($json[0]->lat))?$json[0]->lat:'';
+        $longitude=(!empty($json) && !empty($json[0]->lon))?$json[0]->lon:'';
         $user= $this->user_repository->create($request,$latitude,$longitude);
         return response()->json(['success' => true,'message' => 'Registration is completed']);
 }
