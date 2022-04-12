@@ -121,6 +121,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -151,7 +152,8 @@ __webpack_require__.r(__webpack_exports__);
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.required
       },
       phone: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.required
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.required,
+        minLength: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.minLength)(10)
       },
       address: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.required
@@ -160,7 +162,8 @@ __webpack_require__.r(__webpack_exports__);
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.required
       },
       password_confirmation: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.required
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.required,
+        sameAsPassword: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.sameAs)('password')
       }
     }
   },
@@ -172,8 +175,9 @@ __webpack_require__.r(__webpack_exports__);
       this.user.email = '';
       this.user.name = '';
       this.user.phone = '';
+      this.user.address = '';
       this.user.password = '';
-      this.address.password = '';
+      debugger;
       this.user.password_confirmation = '';
     },
     register: function register() {
@@ -196,13 +200,15 @@ __webpack_require__.r(__webpack_exports__);
         _this.success_message = response.data.message;
 
         _this.resetForm();
+
+        _this.processing = false;
       })["catch"](function (_ref) {
         var data = _ref.response.data;
 
         if (typeof data != 'undefined') {
           _this.errors = data.errors;
         }
-      })["finally"](function () {
+
         _this.processing = false;
       });
     }

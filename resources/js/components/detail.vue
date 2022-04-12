@@ -52,12 +52,8 @@ import navigation from './Layouts/Navigation.vue'
 export default {
     name:'detail',
     data(){
-        return {
-          success_message:'',
-          error:''
-        }
+        return {}
     },
-
    components: {navigation},
     methods:{
       getUsersDetail(){

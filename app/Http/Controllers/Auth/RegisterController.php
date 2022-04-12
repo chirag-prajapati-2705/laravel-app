@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Validator;
 use App\Interfaces\UserRepositoryInterface;
+use App\Http\Requests\RegisterUserFormRequest;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
 class RegisterController extends Controller
@@ -46,42 +47,22 @@ class RegisterController extends Controller
         $this->user_repository = $user_repository;
     }
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        
-    }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\Models\User
-     */
-    protected function create(array $data)
-    {
-        
-    }
-
-    public function register(Request $request){
-
-      $latitude='';
-      $longitude='';
-      $post_data = $request->validate([
-        'name'=>'required|string',
-        'phone' => 'required|min:11|numeric',
-        'email'=>'required|string|email|unique:users',
-        'password'=>'required|min:8'
-      ]);
-
-      $user= $this->user_repository->create($request,$latitude,$longitude);
-      return response()->json(['success' => true,'message' => 'Registration is completed']);
-
+    public function register(RegisterUserFormRequest $request){
+      $address = $request->get('address');
+      $url = "https://nominatim.openstreetmap.org/search?q=$address&format=json&addressdetails=1&limit=1";
+      $opts = array(
+        'http'=>array(
+          'header'=>array("Referer: $url\r\n")
+          )
+        );
+        $context = stream_context_create($opts);
+        $content_url = file_get_contents($url, false, $context); 
+        $json = json_decode($content_url);
+        $latitude=!empty($json[0]->lat)?$json[0]->lat:'';
+        $longitude=!empty($json[0]->lon)?$json[0]->lon:$json[0]->lon;
+        $user= $this->user_repository->create($request,$latitude,$longitude);
+        return response()->json(['success' => true,'message' => 'Registration is completed']);
 }
 
 }

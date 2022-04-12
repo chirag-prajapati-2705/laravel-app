@@ -11,8 +11,6 @@ const List = () => import('../components/List.vue')
 const Detail = () => import('../components/detail.vue')
 const Map = () => import('../components/map.vue')
 
-
-
 const Routes = [
     {
         name:"register",
@@ -37,10 +35,10 @@ const Routes = [
     component: Detail,
   },
     {
-    path: 'map',
+    path: '/map',
     name: 'map',
     component: Map,
- }
+  }
 ]
 
 var router  = new VueRouter({

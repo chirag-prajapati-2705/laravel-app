@@ -45,7 +45,8 @@
                             </div>
                             <div class="form-group col-12">
                                 <label for="password_confirmation" class="font-weight-bold">Confirm Password</label>
-                                <input type="password" :class="{ 'hasError': $v.user.password_confirmation.$error}" name="password_confirmation" v-model="user.password_confirmation" id="password_confirmation" placeholder="Enter Password" class="form-control">
+                                <input type="password" :class="{ 'hasError': $v.user.password_confirmation.$error}"
+                                 name="password_confirmation" v-model="user.password_confirmation" id="password_confirmation" placeholder="Enter Password" class="form-control">
                             </div>
                             <div class="col-12 mb-2">
                                 <button type="submit" :disabled="processing" class="btn btn-primary btn-block">
@@ -88,10 +89,10 @@ export default {
         user:{
           name: {required},
           email: {required},
-          phone: {required},
+          phone: {required,minLength: minLength(10)},
           address: {required},
           password: {required},
-          password_confirmation: {required}
+          password_confirmation: {required, sameAsPassword: sameAs('password')}
         }
   },
     components: {navigation},
@@ -100,8 +101,9 @@ export default {
               this.user.email = ''; 
               this.user.name = ''; 
               this.user.phone = ''; 
+              this.user.address = ''; 
               this.user.password = ''; 
-              this.address.password = ''; 
+              debugger;
               this.user.password_confirmation = ''; 
         },
          register(){
@@ -117,14 +119,16 @@ export default {
                 this.$v.user.$reset();
                 this.success_message = response.data.message;
                 this.resetForm();
+                this.processing = false;
+
             }).catch(({response:{data}})=>{
                if(typeof data!='undefined')
                {
                  this.errors = data.errors;
                }
-            }).finally(()=>{
-                this.processing = false
-            })
+               this.processing = false;
+
+            });
         }
     }
 }
